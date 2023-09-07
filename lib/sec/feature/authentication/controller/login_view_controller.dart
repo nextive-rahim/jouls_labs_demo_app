@@ -45,7 +45,7 @@ class LoginViewController extends GetxController {
         email = user.email;
         token = googleSignInAuthentication.accessToken;
         userC = user;
-        Get.toNamed(Routes.login);
+        Get.toNamed(Routes.home);
       }
       return user;
     } catch (e) {
@@ -81,7 +81,7 @@ class LoginViewController extends GetxController {
   checkSignIn() async {
     if (await googleSignIn.isSignedIn()) {
       refreshToken().then((value) {
-        Get.toNamed(Routes.login);
+        Get.toNamed(Routes.home);
       });
     } else {
       signInWithGoogle();
