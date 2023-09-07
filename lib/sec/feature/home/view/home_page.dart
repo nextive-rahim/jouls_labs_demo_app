@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
+import 'package:jouls_labs_demo_app/sec/feature/utils/time_converter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +14,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final controller = Get.put(HomeViewController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller.loadDocuments();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +46,12 @@ class _HomePageState extends State<HomePage> {
                 child: const Text(TextConstants.uploadFile),
               ),
             ),
+            Obx(() {
+              final time = DateTime.fromMillisecondsSinceEpoch(
+                      controller.file[0].uploadTime! * 1000)
+                  .toLocal();
+              return Text(getFormattedTime(time).toString());
+            })
           ],
         ),
       ),
