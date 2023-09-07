@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
@@ -36,21 +37,42 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(
           children: [
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary),
-                onPressed: () {
-                  controller.pickDocument();
-                },
-                child: const Text(TextConstants.uploadFile),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary),
+                  onPressed: () {
+                    controller.pickDocument();
+                  },
+                  child: const Text(TextConstants.uploadFile),
+                ),
+                const SizedBox(width: 20),
+                Obx(
+                  () => controller.isShowProgressIndicator.value == true
+                      ? SpinKitFadingCircle(
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: index.isEven ? Colors.red : Colors.green,
+                              ),
+                            );
+                          },
+                        )
+                      : const Offstage(),
+                )
+              ], 
             ),
             Obx(() {
               final time = DateTime.fromMillisecondsSinceEpoch(
                       controller.file[0].uploadTime! * 1000)
                   .toLocal();
-              return Text(getFormattedTime(time).toString());
+              return Column(
+                children: [
+                  Text(getFormattedTime(time).toString()),
+                ],
+              );
             })
           ],
         ),

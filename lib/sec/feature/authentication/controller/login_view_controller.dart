@@ -7,6 +7,8 @@ class LoginViewController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? email;
   String? token;
+  String? profileImage;
+  String? userName;
   var userC;
   final GoogleSignIn googleSignIn =
       GoogleSignIn(scopes: ['https://mail.google.com/']);
@@ -44,6 +46,8 @@ class LoginViewController extends GetxController {
       if (user != null) {
         email = user.email;
         token = googleSignInAuthentication.accessToken;
+        profileImage = user.photoURL;
+        userName = user.displayName;
         userC = user;
         Get.toNamed(Routes.home);
       }

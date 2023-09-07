@@ -12,6 +12,9 @@ class DBHelper {
   static const String id = 'id';
   static const String fileUrl = 'fileUrl';
   static const String uploadedTime = 'uploadTime';
+  static const String userName = 'userName';
+  static const String profileImage = 'profileImage';
+  static const String email = 'email';
   static const String table = 'PhotosTable';
   static const String dbName = 'photos.db';
 
@@ -38,7 +41,7 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-      "CREATE TABLE $table ($id INTEGER, $fileUrl TEXT, $uploadedTime INTEGER)",
+      "CREATE TABLE $table ($id INTEGER, $fileUrl TEXT, $uploadedTime INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
     );
   }
 
@@ -61,6 +64,9 @@ class DBHelper {
         id,
         fileUrl,
         uploadedTime,
+        userName,
+        profileImage,
+        email,
       ],
     );
     List<UploadedFileModel> files = [];
@@ -72,7 +78,7 @@ class DBHelper {
         );
       }
     }
-
+    print(files[0].email);
     return files;
   }
 
