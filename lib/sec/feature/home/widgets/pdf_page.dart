@@ -126,10 +126,11 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
                 isDense: true,
                 hintText: 'Page Number',
                 hintStyle: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w300,
-                    fontSize: 14,
-                    color: Colors.black38),
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w300,
+                  fontSize: 14,
+                  color: Colors.black38,
+                ),
                 fillColor: Colors.transparent,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -152,18 +153,20 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
               IconButton(
                 icon: const Icon(Icons.chevron_left),
                 iconSize: 50,
-                color: Colors.black,
+                color: AppColors.primary,
                 onPressed: () {
-                  setState(() {
-                    if (_currentPage > 0) {
-                      _currentPage--;
-                      _pdfViewController!.setPage(_currentPage);
-                    }
-                  });
+                  setState(
+                    () {
+                      if (_currentPage > 0) {
+                        _currentPage--;
+                        _pdfViewController!.setPage(_currentPage);
+                      }
+                    },
+                  );
                 },
               ),
               Text(
-                "${_currentPage + 1}/$_totalPages",
+                "${_currentPage + 1} / $_totalPages",
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -172,14 +175,16 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
               IconButton(
                 icon: const Icon(Icons.chevron_right),
                 iconSize: 50,
-                color: Colors.black,
+                color: AppColors.primary,
                 onPressed: () {
-                  setState(() {
-                    if (_currentPage < _totalPages - 1) {
-                      _currentPage++;
-                      _pdfViewController!.setPage(_currentPage);
-                    }
-                  });
+                  setState(
+                    () {
+                      if (_currentPage < _totalPages - 1) {
+                        _currentPage++;
+                        _pdfViewController!.setPage(_currentPage);
+                      }
+                    },
+                  );
                 },
               ),
             ],
