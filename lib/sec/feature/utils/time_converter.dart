@@ -12,3 +12,11 @@ String? getFormattedTime(DateTime? dateTime) {
   time = DateFormat.jm().format(dateTime!.toLocal());
   return time;
 }
+String? getFormattedDateTime(DateTime? dateTime) {
+  String? time;
+  if (dateTime != null) {
+    time =
+        '${DateFormat.yMMMMd().format(dateTime)}, ${DateFormat.jm().format(dateTime.toLocal())}';
+  }
+  return time;
+}
