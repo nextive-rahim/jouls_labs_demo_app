@@ -41,7 +41,7 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-      "CREATE TABLE $table ($id INTEGER, $fileUrl TEXT, $uploadedTime INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
+      "CREATE TABLE $table ($id INTEGER, $fileUrl BLOB, $uploadedTime INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
     );
   }
 
@@ -78,7 +78,6 @@ class DBHelper {
         );
       }
     }
-    print(files[0].email);
     return files;
   }
 

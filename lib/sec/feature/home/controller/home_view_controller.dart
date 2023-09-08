@@ -23,6 +23,7 @@ class HomeViewController extends GetxController {
         allowedExtensions: [
           "pdf",
           'doc',
+          'docx',
         ]);
 
     if (pickedFile == null) {
@@ -36,7 +37,7 @@ class HomeViewController extends GetxController {
 
       UploadedFileModel fileModel = UploadedFileModel(
         id: 0,
-        fileUrl: fileUrl!,
+        fileUrl: fileUrl,
         uploadTime: ms,
         userName: userController.userName,
         email: userController.email,

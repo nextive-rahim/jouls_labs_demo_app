@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
+import 'package:jouls_labs_demo_app/sec/feature/home/widgets/pdf_page.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
-import 'package:jouls_labs_demo_app/sec/feature/utils/time_converter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -62,18 +62,25 @@ class _HomePageState extends State<HomePage> {
                         )
                       : const Offstage(),
                 )
-              ], 
+              ],
             ),
-            Obx(() {
-              final time = DateTime.fromMillisecondsSinceEpoch(
-                      controller.file[0].uploadTime! * 1000)
-                  .toLocal();
-              return Column(
-                children: [
-                  Text(getFormattedTime(time).toString()),
-                ],
-              );
-            })
+            Obx(
+              () {
+                // final time = DateTime.fromMillisecondsSinceEpoch(
+                //         controller.file[0].uploadTime! * 1000)
+                //     .toLocal();
+                return controller.file.isNotEmpty
+                    ? SingleChildScrollView(
+                        child: SizedBox(
+                          height: 555,
+                          child: PDFViewerWidget(
+                            pdfLink: controller.file[0].fileUrl!,
+                          ),
+                        ),
+                      )
+                    : const Offstage();
+              },
+            ),
           ],
         ),
       ),
