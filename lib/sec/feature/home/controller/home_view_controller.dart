@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/authentication/controller/login_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/model/upload_file_model.dart';
@@ -17,6 +18,7 @@ class HomeViewController extends GetxController {
     loadingIndicator.value = false;
   }
 
+  User? user = FirebaseAuth.instance.currentUser;
   final userController = Get.find<LoginViewController>();
   String? fileUrl;
   Future<File?> pickDocument() async {
@@ -41,9 +43,9 @@ class HomeViewController extends GetxController {
         id: 0,
         fileUrl: fileUrl,
         uploadTime: ms,
-        userName: userName,
-        email: email,
-        profileImage: profileImage,
+        userName: user!.displayName,
+        email: user!.email,
+        profileImage: user!.photoURL,
       );
 
       await dbHelper.saveFiles(fileModel);

@@ -4,11 +4,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/widgets/db_helper.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 
-String? email;
-String? token;
-String? profileImage;
-String? userName;
-
 class LoginViewController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -48,11 +43,6 @@ class LoginViewController extends GetxController {
       assert(currentUser!.uid == user!.uid);
 
       if (user != null) {
-        email = user.email;
-        token = googleSignInAuthentication.accessToken;
-        profileImage = user.photoURL;
-        userName = user.displayName;
-        userC = user;
         Get.toNamed(Routes.home);
       }
       return user;
@@ -76,8 +66,7 @@ class LoginViewController extends GetxController {
     //SIGNING IN WITH CREDENTIAL & MAKING A USER IN FIREBASE  AND GETTING USER CLASS
     final userCredential = await _auth.signInWithCredential(credential);
     final User? user = userCredential.user;
-    email = user!.email;
-    token = googleSignInAuthentication.accessToken;
+
     userC = user;
     return googleSignInAuthentication.accessToken; // New refreshed token
   }

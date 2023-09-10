@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -18,27 +19,22 @@ class SplashPage extends StatefulWidget {
 DBHelper dbHelper = DBHelper();
 List<UploadedFileModel> file = <UploadedFileModel>[];
 
+User? user = FirebaseAuth.instance.currentUser;
+
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
     Get.put(LoginViewController());
-    loadDocuments();
-  }
-
-  Future<void> loadDocuments() async {
-    final loadedDocuments = await dbHelper.getFiles();
-    file = loadedDocuments;
+    print(user!.emailVerified);
     _navigateToNextScreen();
   }
 
   Future<void> _navigateToNextScreen() async {
     Future.delayed(const Duration(seconds: 1)).then(
       (value) {
-        if (file.isNotEmpty) {
-          if (file.first.email != null) {
-            return Get.offNamed(Routes.home);
-          }
+        if (user!.emailVerified) {
+          return Get.offNamed(Routes.home);
         }
         return Get.offNamed(Routes.login);
       },
