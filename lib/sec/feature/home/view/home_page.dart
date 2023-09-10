@@ -6,6 +6,7 @@ import 'package:jouls_labs_demo_app/sec/feature/home/widgets/pdf_page.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/time_converter.dart';
+import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -64,16 +65,30 @@ class _HomePageState extends State<HomePage> {
                             },
                           )
                         : const Offstage(),
-                  )
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary),
+                    onPressed: () {
+                      Get.toNamed(
+                        Routes.profile,
+                        arguments: controller.file,
+                      );
+                    },
+                    child: const Text(TextConstants.profile),
+                  ),
                 ],
               ),
               Obx(
                 () {
-                  final time = DateTime.fromMillisecondsSinceEpoch(
-                          controller.file[0].uploadTime! * 1000)
-                      .toLocal();
-                  String fileName =
-                      " File Name : ${controller.file[0].fileUrl!.split('/').last}";
+                  final time = controller.file.isNotEmpty
+                      ? DateTime.fromMillisecondsSinceEpoch(
+                              controller.file[0].uploadTime! * 1000)
+                          .toLocal()
+                      : DateTime.now();
+                  String fileName = controller.file.isNotEmpty
+                      ? " File Name : ${controller.file[0].fileUrl!.split('/').last}"
+                      : '';
                   return Column(
                     children: [
                       Row(
@@ -100,16 +115,18 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       const SizedBox(height: 6),
-                      controller.file.isNotEmpty
-                          ? SingleChildScrollView(
+                      controller.isShowProgressIndicator.value == true
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : SingleChildScrollView(
                               child: SizedBox(
                                 height: 500,
                                 child: PDFViewerWidget(
-                                  pdfLink: controller.file[0].fileUrl!,
+                                  pdfLink: controller.file.first.fileUrl!,
                                 ),
                               ),
                             )
-                          : const Offstage(),
                     ],
                   );
                 },
