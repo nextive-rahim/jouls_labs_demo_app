@@ -4,4 +4,5 @@ class TextConstants {
   static const String fileMetaData = 'File Meta Data :';
   static const String profile = 'Profile';
   static const String login = 'Google Login';
+  static const String edit = 'Edit';
 }

@@ -2,9 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pspdfkit_flutter/pspdfkit.dart';
+
+class EditPdfScreen extends StatefulWidget {
+  const EditPdfScreen({
+    super.key,
+    //required this.pdfLink,
+  });
+
+  @override
+  State<EditPdfScreen> createState() => _EditPdfScreenState();
+}
+
+class _EditPdfScreenState extends State<EditPdfScreen> {
+  final String pdfLink = Get.arguments;
+  @override
+  void initState() {
+    editPdf();
+
+    super.initState();
+  }
+
+  void editPdf() async {
+    await Pspdfkit.present(pdfLink);
+    await Permission.storage.request();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('widget.title'),
+      ),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[],
+        ),
+      ),
+    );
+  }
+}
 
 class PDFViewerWidget extends StatefulWidget {
   final String pdfLink;
@@ -29,6 +71,7 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
   bool loaded = false;
   final homeController = Get.find<HomeViewController>();
   void requestPermission() async {
+    // await Pspdfkit.present(widget.pdfLink);
     await Permission.storage.request();
   }
 
@@ -95,7 +138,7 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
   Container _buildPageNavigation() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.all(00),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
