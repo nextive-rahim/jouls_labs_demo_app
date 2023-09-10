@@ -67,22 +67,18 @@ class _HomePageState extends State<HomePage> {
                             height: 35,
                             width: 35,
                           ),
-                    controller.file.isNotEmpty
-                        ? const SizedBox(width: 20)
-                        : const Offstage(),
-                    controller.file.isNotEmpty
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary),
-                            onPressed: () {
-                              Get.toNamed(
-                                Routes.profile,
-                                arguments: controller.file,
-                              );
-                            },
-                            child: const Text(TextConstants.profile),
-                          )
-                        : const Offstage(),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary),
+                      onPressed: () {
+                        Get.toNamed(
+                          Routes.profile,
+                          arguments: controller.file,
+                        );
+                      },
+                      child: const Text(TextConstants.profile),
+                    )
                   ],
                 ),
               ),

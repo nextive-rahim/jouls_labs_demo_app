@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -6,13 +7,13 @@ import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({
+  ProfileScreen({
     super.key,
   });
-
+  final User? firebaseUser = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    final List<UploadedFileModel> user = Get.arguments;
+    final List<UploadedFileModel> sqfliteUser = Get.arguments;
     return Scaffold(
       appBar: AppBar(
         title: const Text(TextConstants.profile),
@@ -31,7 +32,9 @@ class ProfileScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    user.first.profileImage ?? '',
+                    sqfliteUser.isNotEmpty
+                        ? sqfliteUser.first.profileImage!
+                        : firebaseUser!.photoURL!,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -41,11 +44,15 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
                 Text(
-                  user.first.userName ?? '',
+                  sqfliteUser.isNotEmpty
+                      ? sqfliteUser.first.userName!
+                      : firebaseUser!.displayName!,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
-                Text(user.first.email ?? ''),
+                Text(sqfliteUser.isNotEmpty
+                    ? sqfliteUser.first.email!
+                    : firebaseUser!.email!),
               ],
             )
           ],
