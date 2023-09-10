@@ -27,12 +27,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(TextConstants.homeAppBar),
-      //   backgroundColor: AppColors.primary,
-      //   elevation: 0,
-      //   centerTitle: true,
-      // ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -40,55 +34,76 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary),
-                    onPressed: () {
-                      controller.pickDocument();
-                    },
-                    child: const Text(TextConstants.uploadFile),
-                  ),
-                  const SizedBox(width: 20),
-                  Obx(
-                    () => controller.pdfUploadProgressIndicator.value == true
-                        ? SpinKitFadingCircle(
-                            itemBuilder: (BuildContext context, int index) {
-                              return DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color:
-                                      index.isEven ? Colors.red : Colors.green,
-                                ),
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary),
+                      onPressed: () {
+                        controller.pickDocument();
+                      },
+                      child: const Text(TextConstants.uploadFile),
+                    ),
+                    const SizedBox(width: 20),
+                    controller.pdfUploadProgressIndicator.value == true
+                        ? SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: SpinKitFadingCircle(
+                              itemBuilder: (BuildContext context, int index) {
+                                return DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: index.isEven
+                                        ? Colors.red
+                                        : Colors.green,
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : const SizedBox(
+                            height: 35,
+                            width: 35,
+                          ),
+                    const SizedBox(width: 20),
+                    controller.file.isNotEmpty
+                        ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary),
+                            onPressed: () {
+                              Get.toNamed(
+                                Routes.profile,
+                                arguments: controller.file,
                               );
                             },
+                            child: const Text(TextConstants.profile),
                           )
                         : const Offstage(),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary),
-                    onPressed: () {
-                      Get.toNamed(
-                        Routes.profile,
-                        arguments: controller.file,
-                      );
-                    },
-                    child: const Text(TextConstants.profile),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 10),
               Obx(
                 () {
-                  final time = controller.file.isNotEmpty
-                      ? DateTime.fromMillisecondsSinceEpoch(
-                              controller.file[0].uploadTime! * 1000)
-                          .toLocal()
-                      : DateTime.now();
-                  String fileName = controller.file.isNotEmpty
-                      ? " File Name : ${controller.file[0].fileUrl!.split('/').last}"
-                      : '';
+                  if (controller.loadingIndicator.value == true) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (controller.file.isEmpty) {
+                    return const Center(
+                      child: Offstage(),
+                    );
+                  }
+                  final time = DateTime.fromMillisecondsSinceEpoch(
+                          controller.file[0].uploadTime! * 1000)
+                      .toLocal();
+
+                  String fileName =
+                      "File Name : ${controller.file[0].fileUrl!.split('/').last}";
+
                   return Column(
                     children: [
                       Row(
@@ -108,25 +123,28 @@ class _HomePageState extends State<HomePage> {
                                 fileName,
                               ),
                               const SizedBox(height: 3),
-                              Text(
-                                  " Uploaded Time : ${getFormattedTime(time).toString()}")
+                              controller.file.isNotEmpty
+                                  ? Text(
+                                      "Uploaded Time : ${getFormattedTime(time).toString()}")
+                                  : const Offstage()
                             ],
                           )
                         ],
                       ),
-                      const SizedBox(height: 6),
-                      controller.loadingIndicator.value == true
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : SingleChildScrollView(
-                              child: SizedBox(
-                                height: 500,
-                                child: PDFViewerWidget(
-                                  pdfLink: controller.file.first.fileUrl!,
+                      const SizedBox(height: 10),
+                      SingleChildScrollView(
+                        child: SizedBox(
+                          height: 500,
+                          child: controller.pdfUploadProgressIndicator.value ==
+                                  true
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : PDFViewerWidget(
+                                  pdfLink: controller.file[0].fileUrl!,
                                 ),
-                              ),
-                            )
+                        ),
+                      )
                     ],
                   );
                 },

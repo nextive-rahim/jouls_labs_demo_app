@@ -30,6 +30,7 @@ class HomeViewController extends GetxController {
     if (pickedFile == null) {
       return null;
     } else {
+      pdfUploadProgressIndicator.value = true;
       final pickedDocument = pickedFile.files.first;
       fileUrl = pickedDocument.path;
 
@@ -40,15 +41,14 @@ class HomeViewController extends GetxController {
         id: 0,
         fileUrl: fileUrl,
         uploadTime: ms,
-        userName: userController.userName,
-        email: userController.email,
-        profileImage: userController.profileImage,
+        userName: userName,
+        email: email,
+        profileImage: profileImage,
       );
-      pdfUploadProgressIndicator.value = true;
-      await dbHelper.saveFiles(fileModel);
-      pdfUploadProgressIndicator.value = false;
-      loadDocuments();
 
+      await dbHelper.saveFiles(fileModel);
+      await loadDocuments();
+      pdfUploadProgressIndicator.value = false;
       return File(fileUrl ?? '');
     }
   }
