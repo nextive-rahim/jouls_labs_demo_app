@@ -67,7 +67,9 @@ class _HomePageState extends State<HomePage> {
                             height: 35,
                             width: 35,
                           ),
-                    const SizedBox(width: 20),
+                    controller.file.isNotEmpty
+                        ? const SizedBox(width: 20)
+                        : const Offstage(),
                     controller.file.isNotEmpty
                         ? ElevatedButton(
                             style: ElevatedButton.styleFrom(

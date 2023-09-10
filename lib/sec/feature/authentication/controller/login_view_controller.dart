@@ -53,7 +53,6 @@ class LoginViewController extends GetxController {
         profileImage = user.photoURL;
         userName = user.displayName;
         userC = user;
-
         Get.toNamed(Routes.home);
       }
       return user;
@@ -80,10 +79,6 @@ class LoginViewController extends GetxController {
     email = user!.email;
     token = googleSignInAuthentication.accessToken;
     userC = user;
-    //IdTokenResult tokenResult = await user.getIdTokenResult();
-    // bool data = DateTime.now().isBefore(tokenResult.expirationTime!);
-    // print(tokenResult.expirationTime);
-    // print(token);
     return googleSignInAuthentication.accessToken; // New refreshed token
   }
 
