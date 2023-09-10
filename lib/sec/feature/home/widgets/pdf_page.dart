@@ -41,7 +41,7 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (homeController.isShowProgressIndicator.value == false) {
+    if (homeController.pdfUploadProgressIndicator.value == false) {
       return Scaffold(
         body: PDFView(
           filePath: widget.pdfLink,

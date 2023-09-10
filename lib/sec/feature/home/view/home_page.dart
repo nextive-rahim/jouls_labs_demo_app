@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(width: 20),
                   Obx(
-                    () => controller.isShowProgressIndicator.value == true
+                    () => controller.pdfUploadProgressIndicator.value == true
                         ? SpinKitFadingCircle(
                             itemBuilder: (BuildContext context, int index) {
                               return DecoratedBox(
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       const SizedBox(height: 6),
-                      controller.isShowProgressIndicator.value == true
+                      controller.loadingIndicator.value == true
                           ? const Center(
                               child: CircularProgressIndicator(),
                             )

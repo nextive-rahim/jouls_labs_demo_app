@@ -8,10 +8,13 @@ import 'package:jouls_labs_demo_app/sec/feature/home/widgets/db_helper.dart';
 class HomeViewController extends GetxController {
   DBHelper dbHelper = DBHelper();
   final RxList<UploadedFileModel> file = <UploadedFileModel>[].obs;
-  RxBool isShowProgressIndicator = false.obs;
+  RxBool pdfUploadProgressIndicator = false.obs;
+  RxBool loadingIndicator = false.obs;
   Future<void> loadDocuments() async {
+    loadingIndicator.value = true;
     final loadedDocuments = await dbHelper.getFiles();
     file.value = loadedDocuments;
+    loadingIndicator.value = false;
   }
 
   final userController = Get.find<LoginViewController>();
@@ -22,8 +25,6 @@ class HomeViewController extends GetxController {
         type: FileType.custom,
         allowedExtensions: [
           "pdf",
-          'doc',
-          'docx',
         ]);
 
     if (pickedFile == null) {
@@ -43,10 +44,11 @@ class HomeViewController extends GetxController {
         email: userController.email,
         profileImage: userController.profileImage,
       );
-      isShowProgressIndicator.value = true;
+      pdfUploadProgressIndicator.value = true;
       await dbHelper.saveFiles(fileModel);
-      await loadDocuments();
-      isShowProgressIndicator.value = false;
+      pdfUploadProgressIndicator.value = false;
+      loadDocuments();
+
       return File(fileUrl ?? '');
     }
   }
