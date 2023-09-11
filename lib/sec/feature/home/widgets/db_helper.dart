@@ -11,7 +11,7 @@ class DBHelper {
   static Database? _db;
   static const String id = 'id';
   static const String fileUrl = 'fileUrl';
-  static const String uploadedTime = 'uploadTime';
+  static const String createdAt = 'createdAt';
   static const String userName = 'userName';
   static const String profileImage = 'profileImage';
   static const String email = 'email';
@@ -41,7 +41,7 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-      "CREATE TABLE $table ($id INTEGER, $fileUrl BLOB, $uploadedTime INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
+      "CREATE TABLE $table ($id INTEGER, $fileUrl BLOB, $createdAt INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
     );
   }
 
@@ -63,7 +63,7 @@ class DBHelper {
       columns: [
         id,
         fileUrl,
-        uploadedTime,
+        createdAt,
         userName,
         profileImage,
         email,
@@ -79,6 +79,21 @@ class DBHelper {
       }
     }
     return files;
+  }
+
+  // Update an item by id
+  Future<int> updateItem(int id, String title, String? descrption) async {
+    var dbClient = await db;
+
+    final data = {
+      'title': title,
+      'description': descrption,
+      'createdAt': DateTime.now().toString()
+    };
+
+    final result =
+        await dbClient.update('items', data, where: "id = ?", whereArgs: [id]);
+    return result;
   }
 
   Future close() async {

@@ -42,7 +42,7 @@ class HomeViewController extends GetxController {
       UploadedFileModel fileModel = UploadedFileModel(
         id: 0,
         fileUrl: fileUrl,
-        uploadTime: ms,
+        createdAt: ms,
         userName: user!.displayName,
         email: user!.email,
         profileImage: user!.photoURL,

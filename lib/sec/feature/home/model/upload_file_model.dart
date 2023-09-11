@@ -1,7 +1,7 @@
 class UploadedFileModel {
   int? id;
   String? fileUrl;
-  int? uploadTime;
+  int? createdAt;
   String? userName;
   String? profileImage;
   String? email;
@@ -9,7 +9,7 @@ class UploadedFileModel {
   UploadedFileModel({
     this.id,
     this.fileUrl,
-    this.uploadTime,
+    this.createdAt,
     this.userName,
     this.profileImage,
     this.email,
@@ -17,7 +17,7 @@ class UploadedFileModel {
   UploadedFileModel.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     fileUrl = map['fileUrl'];
-    uploadTime = map["uploadTime"];
+    createdAt = map["createdAt"];
     userName = map['userName'];
     profileImage = map['profileImage'];
     email = map["email"];
@@ -26,7 +26,7 @@ class UploadedFileModel {
     var map = <String, dynamic>{
       'id': id,
       'fileUrl': fileUrl,
-      'uploadTime': uploadTime,
+      'createdAt': createdAt,
       'userName': userName,
       'profileImage': profileImage,
       'email': email,

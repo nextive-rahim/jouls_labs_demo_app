@@ -65,7 +65,7 @@ class _HomeViewState extends State<HomeView> {
                   );
                 }
                 final time = DateTime.fromMillisecondsSinceEpoch(
-                        controller.file[0].uploadTime! * 1000)
+                        controller.file[0].createdAt! * 1000)
                     .toLocal();
 
                 String fileName = controller.file[0].fileUrl!.split('/').last;
