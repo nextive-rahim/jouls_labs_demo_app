@@ -13,6 +13,7 @@ class HomeViewController extends GetxController {
   RxBool loadingIndicator = false.obs;
   // Sqflite not support DateTime formate. So need to covert it int.
   int ms = (((DateTime.now()).millisecondsSinceEpoch) / 1000).round();
+
   Future<void> loadDocuments() async {
     loadingIndicator.value = true;
     final loadedDocuments = await dbHelper.getFiles();
@@ -40,6 +41,7 @@ class HomeViewController extends GetxController {
 
       UploadedFileModel fileModel = UploadedFileModel(
         id: 0,
+        fileName: '',
         fileUrl: fileUrl,
         createdAt: ms,
         userName: user!.displayName,

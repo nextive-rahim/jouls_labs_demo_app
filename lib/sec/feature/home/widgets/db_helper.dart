@@ -10,6 +10,7 @@ class DBHelper {
   factory DBHelper() => _instance;
   static Database? _db;
   static const String id = 'id';
+  static const String fileName = 'fileName';
   static const String fileUrl = 'fileUrl';
   static const String createdAt = 'createdAt';
   static const String userName = 'userName';
@@ -41,7 +42,7 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-      "CREATE TABLE $table ($id INTEGER, $fileUrl BLOB, $createdAt INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
+      "CREATE TABLE $table ($id INTEGER,$fileName TEXT, $fileUrl BLOB, $createdAt INTEGER, $userName TEXT, $profileImage TEXT, $email TEXT)",
     );
   }
 
@@ -62,6 +63,7 @@ class DBHelper {
       table,
       columns: [
         id,
+        fileName,
         fileUrl,
         createdAt,
         userName,
@@ -84,12 +86,14 @@ class DBHelper {
   // Update an item by id
   Future<int> updateItem({
     int? id,
+    String?fileName,
     String? fileUrl,
     int? createdAt,
   }) async {
     var dbClient = await db;
 
     final data = {
+      'fileName': fileName,
       'fileUrl': fileUrl,
       'createdAt': createdAt,
     };

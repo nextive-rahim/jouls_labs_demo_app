@@ -87,6 +87,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         dbHelper.updateItem(
                           id: 0,
+                          fileName: controller.file[0].fileUrl!.split('/').last,
                           fileUrl: controller.file.first.fileUrl,
                           createdAt: controller.ms,
                         );
