@@ -112,24 +112,16 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
         bottomNavigationBar: _buildPageNavigation(),
       );
     } else {
-      if (exists) {
-        //Replace with your loading UI
-        return const Center(
-          child: Text(
-            "Loading..",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+      //Replace with your loading UI
+      return const Center(
+        child: Text(
+          "Loading..",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-        );
-      } else {
-        //Replace Error UI
-        return const Text(
-          "PDF Not Available",
-          style: TextStyle(fontSize: 20),
-        );
-      }
+        ),
+      );
     }
   }
 
