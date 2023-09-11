@@ -19,22 +19,25 @@ class SplashPage extends StatefulWidget {
 DBHelper dbHelper = DBHelper();
 List<UploadedFileModel> file = <UploadedFileModel>[];
 
-User? user = FirebaseAuth.instance.currentUser;
+User? user;
 
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
     Get.put(LoginViewController());
-    print(user!.emailVerified);
+    user = FirebaseAuth.instance.currentUser;
+
     _navigateToNextScreen();
   }
 
   Future<void> _navigateToNextScreen() async {
     Future.delayed(const Duration(seconds: 1)).then(
       (value) {
-        if (user!.emailVerified) {
-          return Get.offNamed(Routes.home);
+        if (user != null) {
+          if (user!.emailVerified) {
+            return Get.offNamed(Routes.home);
+          }
         }
         return Get.offNamed(Routes.login);
       },

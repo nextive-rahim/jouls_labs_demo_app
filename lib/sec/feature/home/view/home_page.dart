@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:jouls_labs_demo_app/main.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
-import 'package:jouls_labs_demo_app/sec/feature/home/widgets/pdf_page.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
-import 'package:jouls_labs_demo_app/sec/feature/utils/time_converter.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 
 class HomePage extends StatefulWidget {
@@ -95,52 +94,14 @@ class _HomePageState extends State<HomePage> {
                       child: Offstage(),
                     );
                   }
-                  final time = DateTime.fromMillisecondsSinceEpoch(
-                          controller.file[0].uploadTime! * 1000)
-                      .toLocal();
 
-                  String fileName =
-                      "File Name : ${controller.file[0].fileUrl!.split('/').last}";
-
-                  return Column(
+                  return const Column(
                     children: [
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                TextConstants.fileMetaData,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                fileName,
-                              ),
-                              const SizedBox(height: 3),
-                              controller.file.isNotEmpty
-                                  ? Text(
-                                      "Uploaded Time : ${getFormattedTime(time).toString()}")
-                                  : const Offstage()
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                       SingleChildScrollView(
                         child: SizedBox(
-                          height: 500,
-                          child: controller.pdfUploadProgressIndicator.value ==
-                                  true
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : PDFViewerWidget(
-                                  pdfLink: controller.file[0].fileUrl!,
-                                ),
+                          height: 580,
+                          child: HomeView(),
                         ),
                       )
                     ],
