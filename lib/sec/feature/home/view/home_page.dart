@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/main.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
+import 'package:jouls_labs_demo_app/sec/feature/home/widgets/db_helper.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final controller = Get.put(HomeViewController());
+  DBHelper dbHelper = DBHelper();
   @override
   void initState() {
     // TODO: implement initState
@@ -77,6 +79,19 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: const Text(TextConstants.profile),
+                    ),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary),
+                      onPressed: () {
+                        dbHelper.updateItem(
+                          id: 0,
+                          fileUrl: controller.file.first.fileUrl,
+                          createdAt: controller.ms,
+                        );
+                      },
+                      child: const Text(TextConstants.edit),
                     )
                   ],
                 ),

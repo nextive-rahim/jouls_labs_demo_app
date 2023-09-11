@@ -82,17 +82,24 @@ class DBHelper {
   }
 
   // Update an item by id
-  Future<int> updateItem(int id, String title, String? descrption) async {
+  Future<int> updateItem({
+    int? id,
+    String? fileUrl,
+    int? createdAt,
+  }) async {
     var dbClient = await db;
 
     final data = {
-      'title': title,
-      'description': descrption,
-      'createdAt': DateTime.now().toString()
+      'fileUrl': fileUrl,
+      'createdAt': createdAt,
     };
 
-    final result =
-        await dbClient.update('items', data, where: "id = ?", whereArgs: [id]);
+    final result = await dbClient.update(
+      table,
+      data,
+      where: "id = ?",
+      whereArgs: [id],
+    );
     return result;
   }
 
