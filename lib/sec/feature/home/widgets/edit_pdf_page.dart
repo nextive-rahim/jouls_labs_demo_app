@@ -1,64 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
+import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
+import 'package:jouls_labs_demo_app/sec/feature/utils/time_converter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// class EditPdfScreen extends StatefulWidget {
-//   const EditPdfScreen({
-//     super.key,
-//     //required this.pdfLink,
-//   });
-
-//   @override
-//   State<EditPdfScreen> createState() => _EditPdfScreenState();
-// }
-
-// class _EditPdfScreenState extends State<EditPdfScreen> {
-//   final String pdfLink = Get.arguments;
-//   @override
-//   void initState() {
-//     editPdf();
-
-//     super.initState();
-//   }
-
-//   void editPdf() async {
-//     await Pspdfkit.present(pdfLink);
-//     await Permission.storage.request();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('widget.title'),
-//       ),
-//       body: const Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class PDFViewerWidget extends StatefulWidget {
-  final String pdfLink;
-
-  const PDFViewerWidget({
-    super.key,
-    required this.pdfLink,
-  });
+class EditPdfPage extends StatefulWidget {
+  const EditPdfPage({super.key});
 
   @override
-  _PDFViewerWidgetState createState() => _PDFViewerWidgetState();
+  _EditPdfPageState createState() => _EditPdfPageState();
 }
 
-class _PDFViewerWidgetState extends State<PDFViewerWidget> {
+class _EditPdfPageState extends State<EditPdfPage> {
+  final controller = Get.put(HomeViewController());
+  final User? user = FirebaseAuth.instance.currentUser;
   String urlPDFPath = "";
   String title = "";
   bool exists = true;
@@ -69,7 +28,6 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
   bool loaded = false;
   final homeController = Get.find<HomeViewController>();
   void requestPermission() async {
-    // await Pspdfkit.present(widget.pdfLink);
     await Permission.storage.request();
   }
 
@@ -82,32 +40,94 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final String pdfLink = Get.arguments;
+    final time = DateTime.fromMillisecondsSinceEpoch(
+            controller.file[0].createdAt! * 1000)
+        .toLocal();
+
+    String fileName = controller.file[0].fileName == ''
+        ? controller.file[0].fileUrl!.split('/').last
+        : controller.file.first.fileName!;
     if (homeController.pdfUploadProgressIndicator.value == false) {
       return Scaffold(
-        body: PDFView(
-          filePath: widget.pdfLink,
-          enableSwipe: true,
-          swipeHorizontal: false,
-          autoSpacing: false,
-          pageFling: true,
-          pageSnap: true,
-          fitPolicy: FitPolicy.BOTH,
-          onRender: (pages) {
-            setState(() {
-              _totalPages = pages!.toInt();
-              pdfReady = true;
-            });
-          },
-          onViewCreated: (PDFViewController vc) {
-            setState(() {
-              _pdfViewController = vc;
-            });
-          },
-          onPageChanged: (int? page, int? total) {
-            setState(() {
-              _currentPage = page!.toInt();
-            });
-          },
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+          title: const Text(
+            TextConstants.editedFileInfo,
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Text(
+                    "Edited Author :  ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    user!.displayName ?? '',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 3),
+              Row(
+                children: [
+                  const Text(
+                    TextConstants.editedFileName,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    fileName,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 3),
+              Row(
+                children: [
+                  const Text(
+                    TextConstants.editedTime,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(" ${getFormattedTime(time).toString()}"),
+                ],
+              ),
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                child: SizedBox(
+                  height: 450,
+                  child: PDFView(
+                    filePath: pdfLink,
+                    enableSwipe: true,
+                    swipeHorizontal: false,
+                    autoSpacing: false,
+                    fitPolicy: FitPolicy.BOTH,
+                    onRender: (pages) {
+                      setState(() {
+                        _totalPages = pages!.toInt();
+                        pdfReady = true;
+                      });
+                    },
+                    onViewCreated: (PDFViewController vc) {
+                      setState(() {
+                        _pdfViewController = vc;
+                      });
+                    },
+                    onPageChanged: (int? page, int? total) {
+                      setState(() {
+                        _currentPage = page!.toInt();
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar: _buildPageNavigation(),
       );
@@ -115,7 +135,7 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
       //Replace with your loading UI
       return const Center(
         child: Text(
-          "Loading..",
+          TextConstants.loading,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -128,7 +148,11 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
   Container _buildPageNavigation() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(00),
+      padding: const EdgeInsets.only(
+        bottom: 20,
+        left: 20,
+        right: 20,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -146,7 +170,9 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
               ),
               onChanged: (page) {
                 if (int.parse(page) > 0) {
-                  _pdfViewController!.setPage(int.parse(page));
+                  _pdfViewController!.setPage(
+                    int.parse(page),
+                  );
                 }
               },
               decoration: InputDecoration(
@@ -159,7 +185,6 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
                 isDense: true,
                 hintText: 'Page Number',
                 hintStyle: const TextStyle(
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w300,
                   fontSize: 14,
                   color: Colors.black38,

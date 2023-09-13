@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:jouls_labs_demo_app/sec/feature/home/widgets/db_helper.dart';
+import 'package:jouls_labs_demo_app/sec/core/db_helper.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 
 class LoginViewController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   DBHelper dbHelper = DBHelper();
-  var userC;
+  User? userC;
   final GoogleSignIn googleSignIn =
       GoogleSignIn(scopes: ['https://mail.google.com/']);
   Future<GoogleSignInAccount?> signIn() async {

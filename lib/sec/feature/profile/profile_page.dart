@@ -7,10 +7,10 @@ import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({
-    super.key,
-  });
+  ProfileScreen({super.key});
+
   final User? firebaseUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     final List<UploadedFileModel> sqfliteUser = Get.arguments;
