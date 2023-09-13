@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "132904533499",
+    "project_id": "joulslabs",
+    "storage_bucket": "joulslabs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132904533499:android:ecb7e2d2216539ae6a9f5e",
+        "android_client_info": {
+          "package_name": "com.example.jouls_labs_demo_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132904533499-naj5eljt1us66scrtt5a13dtkjp8dgur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvqqrpG5nqSgKrNgBIK-KCP6vjk4TSdqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132904533499-naj5eljt1us66scrtt5a13dtkjp8dgur.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "132904533499-dmpm93okm1g55cbkrmp5tptntvpm7ctk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.joulsLabsDemoApp.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
