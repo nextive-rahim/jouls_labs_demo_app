@@ -73,8 +73,8 @@ class DBHelper {
     );
     List<UploadedFileModel> files = [];
     if (maps.isNotEmpty) {
-      files.clear();
       for (int i = 0; i < maps.length; i++) {
+        files.clear();
         files.add(
           UploadedFileModel.fromMap(maps[i] as Map<String, dynamic>),
         );

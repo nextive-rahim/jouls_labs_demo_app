@@ -98,11 +98,6 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               Obx(
                 () {
-                  if (controller.loadingIndicator.value == true) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
                   if (controller.file.isEmpty) {
                     return const Center(
                       child: Text(
@@ -114,10 +109,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
                   return const Column(
                     children: [
-                      SizedBox(height: 10),
                       SingleChildScrollView(
                         child: SizedBox(
-                          height: 580,
+                          height: 640,
                           child: HomeView(),
                         ),
                       )

@@ -5,6 +5,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/widgets/moveable_stack_item.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/widgets/pdf_card.dart';
+import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/time_converter.dart';
 
@@ -23,12 +24,12 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
-        height: 600,
+        height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
             Obx(
               () {
-                if (controller.loadingIndicator.value == true) {
+                if (controller.pdfUploadProgressIndicator.value == true) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
@@ -93,8 +94,8 @@ class _HomeViewState extends State<HomeView> {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  height: 700,
-                  color: Colors.blue,
+                  height: 800,
+                  color: AppColors.primary,
                   child: PDFViewerWidget(
                     pdfLink: controller.file[0].fileUrl!,
                   ),
