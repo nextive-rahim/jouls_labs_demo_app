@@ -16,8 +16,8 @@ class DBHelper {
   static const String userName = 'userName';
   static const String profileImage = 'profileImage';
   static const String email = 'email';
-  static const String table = 'PhotosTable';
-  static const String dbName = 'photos.db';
+  static const String table = 'FileTable';
+  static const String dbName = 'file.db';
 
   Future<Database> get db async {
     if (_db != null) {
