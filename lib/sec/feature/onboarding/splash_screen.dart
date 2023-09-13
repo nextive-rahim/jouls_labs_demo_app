@@ -6,7 +6,7 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:jouls_labs_demo_app/sec/feature/authentication/controller/login_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/model/upload_file_model.dart';
-import 'package:jouls_labs_demo_app/sec/feature/home/widgets/db_helper.dart';
+import 'package:jouls_labs_demo_app/sec/core/db_helper.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 
 class SplashPage extends StatefulWidget {

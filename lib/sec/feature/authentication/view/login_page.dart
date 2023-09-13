@@ -14,11 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final controller = Get.put(LoginViewController());
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // controller.checkSignIn();
   }
 
   @override

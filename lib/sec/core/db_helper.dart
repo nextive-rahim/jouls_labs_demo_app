@@ -86,15 +86,13 @@ class DBHelper {
   // Update an item by id
   Future<int> updateItem({
     int? id,
-    String?fileName,
-    String? fileUrl,
+    String? fileName,
     int? createdAt,
   }) async {
     var dbClient = await db;
 
     final data = {
       'fileName': fileName,
-      'fileUrl': fileUrl,
       'createdAt': createdAt,
     };
 
