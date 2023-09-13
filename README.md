@@ -1,4 +1,4 @@
-# jouls_labs_demo_app
+# jouls_labs_skill_testing_app
 
 A new Flutter project.
 
