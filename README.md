@@ -1,6 +1,6 @@
 # jouls_labs_skill_testing_app
 
-A new Flutter project.
+A flutter pdf viewer nad editing project.
 
 ## Getting Started
 
