@@ -22,8 +22,6 @@ class HomeViewController extends GetxController {
 
   RxBool isSavedFile = false.obs;
   RxBool isEditable = false.obs;
-  // Sqflite not support DateTime formate. So need to covert it int.
-  int ms = (((DateTime.now()).millisecondsSinceEpoch) / 1000).round();
 
   Future<void> loadDocuments() async {
     loadingIndicator.value = true;
@@ -41,9 +39,9 @@ class HomeViewController extends GetxController {
       ],
     );
 
-    if (pickedFile == null) {
-      return null;
-    } else {
+    if (pickedFile != null) {
+      // Sqflite not support DateTime formate. So need to covert it int.
+      int ms = (((DateTime.now()).millisecondsSinceEpoch) / 1000).round();
       pdfUploadProgressIndicator.value = true;
       final pickedDocument = pickedFile.files.first;
       fileUrl = pickedDocument.path;
@@ -58,10 +56,13 @@ class HomeViewController extends GetxController {
         profileImage: user!.photoURL,
       );
 
-      await dbHelper.saveFiles(fileModel);
-      await loadDocuments();
+      await dbHelper.saveFiles(fileModel).then((value) async {
+        return await loadDocuments();
+      });
+
       pdfUploadProgressIndicator.value = false;
       return File(fileUrl ?? '');
     }
+    return null;
   }
 }

@@ -150,12 +150,14 @@ class _DashboardPageState extends State<DashboardPage> {
         arguments: controller.file.first.fileUrl!,
       );
     } else {
+      int ms = (((DateTime.now()).millisecondsSinceEpoch) / 1000).round();
       controller.isSavedFile.value = true;
       await dbHelper.updateItem(
         id: 0,
         fileName: 'Edited Pdf File',
-        createdAt: controller.ms,
+        createdAt: ms,
       );
+      print(controller.file.first.createdAt);
     }
   }
 }

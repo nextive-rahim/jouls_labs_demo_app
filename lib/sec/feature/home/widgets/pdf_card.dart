@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
@@ -42,9 +43,20 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (homeController.pdfUploadProgressIndicator.value == false) {
-      return Scaffold(
-        body: PDFView(
+    return Scaffold(
+      body: Obx(() {
+        if (homeController.pdfUploadProgressIndicator.value == true) {
+          return Center(
+            child: Text(
+              TextConstants.loading,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
+        }
+        return PDFView(
           filePath: widget.pdfLink,
           enableSwipe: true,
           swipeHorizontal: false,
@@ -68,21 +80,10 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
               _currentPage = page!.toInt();
             });
           },
-        ),
-        bottomNavigationBar: _buildPageNavigation(),
-      );
-    } else {
-      //Replace with your loading UI
-      return const Center(
-        child: Text(
-          TextConstants.loading,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
+        );
+      }),
+      bottomNavigationBar: _buildPageNavigation(),
+    );
   }
 
   Container _buildPageNavigation() {

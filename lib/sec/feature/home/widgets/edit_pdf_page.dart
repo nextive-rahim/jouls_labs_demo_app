@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
+import 'package:jouls_labs_demo_app/sec/core/db_helper.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
@@ -17,6 +18,7 @@ class EditPdfPage extends StatefulWidget {
 
 class _EditPdfPageState extends State<EditPdfPage> {
   final controller = Get.put(HomeViewController());
+  DBHelper db = DBHelper();
   final User? user = FirebaseAuth.instance.currentUser;
   String urlPDFPath = "";
   String title = "";
@@ -34,6 +36,9 @@ class _EditPdfPageState extends State<EditPdfPage> {
   @override
   void initState() {
     requestPermission();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.loadDocuments();
+    });
 
     super.initState();
   }
@@ -66,76 +71,83 @@ class _EditPdfPageState extends State<EditPdfPage> {
               TextConstants.editedFileInfo,
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 5),
-                Row(
+          body: Obx(
+            () {
+              if (homeController.loadingIndicator.value == true) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      TextConstants.editedAuthor,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        const Text(
+                          TextConstants.editedAuthor,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          user!.displayName ?? '',
+                        ),
+                      ],
                     ),
-                    Text(
-                      user!.displayName ?? '',
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        const Text(
+                          TextConstants.editedFileName,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          fileName,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        const Text(
+                          TextConstants.editedTime,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(" ${getFormattedTime(time).toString()}"),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    SingleChildScrollView(
+                      child: SizedBox(
+                        height: 450,
+                        child: PDFView(
+                          filePath: pdfLink,
+                          enableSwipe: true,
+                          swipeHorizontal: false,
+                          autoSpacing: false,
+                          fitPolicy: FitPolicy.BOTH,
+                          onRender: (pages) {
+                            setState(() {
+                              _totalPages = pages!.toInt();
+                              pdfReady = true;
+                            });
+                          },
+                          onViewCreated: (PDFViewController vc) {
+                            setState(() {
+                              _pdfViewController = vc;
+                            });
+                          },
+                          onPageChanged: (int? page, int? total) {
+                            setState(() {
+                              _currentPage = page!.toInt();
+                            });
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 3),
-                Row(
-                  children: [
-                    const Text(
-                      TextConstants.editedFileName,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      fileName,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 3),
-                Row(
-                  children: [
-                    const Text(
-                      TextConstants.editedTime,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(" ${getFormattedTime(time).toString()}"),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  child: SizedBox(
-                    height: 450,
-                    child: PDFView(
-                      filePath: pdfLink,
-                      enableSwipe: true,
-                      swipeHorizontal: false,
-                      autoSpacing: false,
-                      fitPolicy: FitPolicy.BOTH,
-                      onRender: (pages) {
-                        setState(() {
-                          _totalPages = pages!.toInt();
-                          pdfReady = true;
-                        });
-                      },
-                      onViewCreated: (PDFViewController vc) {
-                        setState(() {
-                          _pdfViewController = vc;
-                        });
-                      },
-                      onPageChanged: (int? page, int? total) {
-                        setState(() {
-                          _currentPage = page!.toInt();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
           bottomNavigationBar: _buildPageNavigation(),
         ),
