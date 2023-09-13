@@ -49,87 +49,96 @@ class _EditPdfPageState extends State<EditPdfPage> {
         ? controller.file[0].fileUrl!.split('/').last
         : controller.file.first.fileName!;
     if (homeController.pdfUploadProgressIndicator.value == false) {
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: AppColors.primary,
-          elevation: 0,
-          title: const Text(
-            TextConstants.editedFileInfo,
+      return WillPopScope(
+        onWillPop: () async {
+          controller.isEditable.value = false;
+          controller.xPosition.value = 0.0;
+          controller.yPosition.value = 0.0;
+          controller.isSavedFile.value = false;
+          return true;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: AppColors.primary,
+            elevation: 0,
+            title: const Text(
+              TextConstants.editedFileInfo,
+            ),
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  const Text(
-                    "Edited Author :  ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    user!.displayName ?? '',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 3),
-              Row(
-                children: [
-                  const Text(
-                    TextConstants.editedFileName,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    fileName,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 3),
-              Row(
-                children: [
-                  const Text(
-                    TextConstants.editedTime,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(" ${getFormattedTime(time).toString()}"),
-                ],
-              ),
-              const SizedBox(height: 10),
-              SingleChildScrollView(
-                child: SizedBox(
-                  height: 450,
-                  child: PDFView(
-                    filePath: pdfLink,
-                    enableSwipe: true,
-                    swipeHorizontal: false,
-                    autoSpacing: false,
-                    fitPolicy: FitPolicy.BOTH,
-                    onRender: (pages) {
-                      setState(() {
-                        _totalPages = pages!.toInt();
-                        pdfReady = true;
-                      });
-                    },
-                    onViewCreated: (PDFViewController vc) {
-                      setState(() {
-                        _pdfViewController = vc;
-                      });
-                    },
-                    onPageChanged: (int? page, int? total) {
-                      setState(() {
-                        _currentPage = page!.toInt();
-                      });
-                    },
+          body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    const Text(
+                      TextConstants.editedAuthor,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      user!.displayName ?? '',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 3),
+                Row(
+                  children: [
+                    const Text(
+                      TextConstants.editedFileName,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      fileName,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 3),
+                Row(
+                  children: [
+                    const Text(
+                      TextConstants.editedTime,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(" ${getFormattedTime(time).toString()}"),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                SingleChildScrollView(
+                  child: SizedBox(
+                    height: 450,
+                    child: PDFView(
+                      filePath: pdfLink,
+                      enableSwipe: true,
+                      swipeHorizontal: false,
+                      autoSpacing: false,
+                      fitPolicy: FitPolicy.BOTH,
+                      onRender: (pages) {
+                        setState(() {
+                          _totalPages = pages!.toInt();
+                          pdfReady = true;
+                        });
+                      },
+                      onViewCreated: (PDFViewController vc) {
+                        setState(() {
+                          _pdfViewController = vc;
+                        });
+                      },
+                      onPageChanged: (int? page, int? total) {
+                        setState(() {
+                          _currentPage = page!.toInt();
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          bottomNavigationBar: _buildPageNavigation(),
         ),
-        bottomNavigationBar: _buildPageNavigation(),
       );
     } else {
       //Replace with your loading UI
