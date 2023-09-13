@@ -1,6 +1,6 @@
 # jouls_labs_skill_testing_app
 
-A flutter pdf viewer nad editing project.
+A flutter pdf viewer, editing and store data in local databases project.
 
 ## Getting Started
 
