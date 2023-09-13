@@ -95,13 +95,9 @@ class _HomeViewState extends State<HomeView> {
                 child: Container(
                   height: 700,
                   color: Colors.blue,
-                  child: controller.pdfUploadProgressIndicator.value == true
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : PDFViewerWidget(
-                          pdfLink: controller.file[0].fileUrl!,
-                        ),
+                  child: PDFViewerWidget(
+                    pdfLink: controller.file[0].fileUrl!,
+                  ),
                 ),
               ),
             ),
