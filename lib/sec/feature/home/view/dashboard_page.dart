@@ -107,7 +107,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   }
 
-                  return const Column(
+                  return
+                   const Column(
                     children: [
                       SingleChildScrollView(
                         child: SizedBox(

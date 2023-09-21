@@ -80,6 +80,7 @@ class PdfWidget extends StatefulWidget {
 }
 
 class _PdfWidgetState extends State<PdfWidget> {
+  final controller = Get.find<HomeViewController>();
   int currentPage = 0;
 
   /// Image convert into a Uint8List file.
@@ -114,7 +115,6 @@ class _PdfWidgetState extends State<PdfWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeViewController>();
     _imageToByte();
     return Stack(
       children: [
@@ -137,8 +137,8 @@ class _PdfWidgetState extends State<PdfWidget> {
               childWhenDragging: Container(),
               onDragUpdate: (details) {
                 setState(() {
-                  controller.xPosition.value = details.delta.dx;
-                  controller.yPosition.value = details.delta.dy;
+                  controller.xPosition.value = details.localPosition.dx;
+                  controller.yPosition.value = details.localPosition.dy;
                 });
               },
               feedback: Material(
@@ -155,8 +155,8 @@ class _PdfWidgetState extends State<PdfWidget> {
                   details.offset,
                 );
                 widget.onDragEnd(offset);
-                print("Before Save file x =${offset.dx - 56}");
-                print("Before Save file y =${offset.dy - 25}");
+                print("Before Save file x =${offset.dx}");
+                print("Before Save file y =${offset.dy}");
                 setState(() {});
               },
               child: Column(
@@ -186,11 +186,18 @@ class _PdfWidgetState extends State<PdfWidget> {
                         //     Offset(widget.offset.dx, widget.offset.dy));
                         document.pages[currentPage].graphics.drawImage(
                           image,
-                          Rect.fromLTWH(convertedOffset.dx - 56,
-                              convertedOffset.dy - 25, 250, 150),
+                          Rect.fromLTWH(controller.xPosition.value,
+                              controller.yPosition.value, 250, 150),
                         );
-
-                        await widget.file.writeAsBytes(await document.save());
+                        final directory = await getExternalStorageDirectory();
+                        final filePath = '${directory!.path}/edited_pdf.pdf';
+                        final file = File(filePath);
+                        await file.writeAsBytes(await document.save());
+                        // final modifiedBytes = await document.save();
+                        // final modifiedFile = File(widget.file.path);
+                        // await modifiedFile.writeAsBytes(modifiedBytes);
+                        print(file.path);
+                        controller.editFilePath.value = file.path;
                         print("After Save file x =${convertedOffset.dx - 56}");
                         print("After Save file y =${convertedOffset.dy - 25}");
 
