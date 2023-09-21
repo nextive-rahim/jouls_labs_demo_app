@@ -80,18 +80,19 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                         child: const Text(TextConstants.profile),
                       ),
-                      // controller.file.isNotEmpty
-                      //     ? ElevatedButton(
-                      //         style: ElevatedButton.styleFrom(
-                      //             backgroundColor: AppColors.primary),
-                      //         onPressed: () async {
-                      //           savePdf();
-                      //         },
-                      //         child: Text(
-                      //           editButtonTitle(),
-                      //         ),
-                      //       )
-                      //     : const Offstage(),
+                      controller.file.isNotEmpty
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary),
+                              onPressed: () {
+                                controller.isEditable.value = true;
+                                print(controller.isEditable.value);
+                              },
+                              child: Text(
+                                TextConstants.edit,
+                              ),
+                            )
+                          : const Offstage(),
                     ],
                   );
                 },
@@ -107,8 +108,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   }
 
-                  return
-                   const Column(
+                  return Column(
                     children: [
                       SingleChildScrollView(
                         child: SizedBox(
@@ -127,32 +127,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  String editButtonTitle() {
-    if (controller.isSavedFile.value == true) {
-      return TextConstants.showEditFile;
-    } else if (controller.xPosition.value != 0.0) {
-      return TextConstants.save;
-    }
-    return TextConstants.edit;
-  }
-
-  Future<void> savePdf() async {
-    if (controller.xPosition.value == 0.0) {
-      controller.isEditable.value = true;
-    } else if (controller.isSavedFile.value == true) {
-      Get.toNamed(
-        Routes.editPdf,
-        arguments: controller.file.first.fileUrl!,
-      );
-    } else {
-      int ms = (((DateTime.now()).millisecondsSinceEpoch) / 1000).round();
-      controller.isSavedFile.value = true;
-      await dbHelper.updateItem(
-        id: 0,
-        fileName: 'Edited Pdf File',
-        createdAt: ms,
-      );
-      print(controller.file.first.createdAt);
-    }
+  showDragAndDropImage() {
+    controller.isEditable.value = true;
   }
 }

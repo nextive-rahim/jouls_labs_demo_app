@@ -87,27 +87,36 @@ class _HomeViewState extends State<HomeView> {
                 );
               },
             ),
-            Positioned(
-              top: 80,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                  height: 800,
-                  color: AppColors.primary,
-                  child: PdfViewer(
-                    file: File(
-                      '/storage/emulated/0/Android/data/com.example.jouls_labs_demo_app/files/edited_pdf.pdf',
-                    ),
-                  )),
-            ),
+            Obx(() => Positioned(
+                  top: 80,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      color: AppColors.primary,
+                      child: PdfViewer(
+                        file: File(
+                          controller.file[0].fileUrl!,
+                        ),
+                      )),
+                )),
             Obx(
               () {
                 return Stack(children: [
                   Positioned(
-                      top: controller.yPosition.value - 50,
-                      left: controller.xPosition.value - 50,
-                      child: Text('X=${controller.xPosition.value}'))
+                    top: controller.yPosition.value,
+                    left: controller.xPosition.value,
+                    child: Text(
+                      controller.isSohowPosition.value
+                          ? 'X=${controller.xPosition.value}'
+                          : '',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  )
                 ]
 
                     //  controller.isEditable.value == true
@@ -120,9 +129,18 @@ class _HomeViewState extends State<HomeView> {
               () {
                 return Stack(children: [
                   Positioned(
-                      top: controller.yPosition.value - 200,
-                      left: controller.xPosition.value -200,
-                      child: Text('Y=${controller.yPosition.value}'))
+                    top: controller.yPosition.value - 180,
+                    left: controller.xPosition.value - 190,
+                    child: Text(
+                      controller.isSohowPosition.value
+                          ? 'Y=${controller.yPosition.value}'
+                          : '',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  )
                 ]
 
                     //  controller.isEditable.value == true

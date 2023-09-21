@@ -16,7 +16,10 @@ class HomeViewController extends GetxController {
   User? user = FirebaseAuth.instance.currentUser;
   String? fileUrl;
   Offset? offset;
+
   RxString editFilePath = ''.obs;
+  RxBool isShowOriginalFile = false.obs;
+  RxBool isSohowPosition = false.obs;
   RxBool pdfUploadProgressIndicator = false.obs;
   RxBool loadingIndicator = false.obs;
 

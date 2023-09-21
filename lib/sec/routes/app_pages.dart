@@ -28,9 +28,9 @@ class AppPages {
       name: Routes.profile,
       page: () => ProfileScreen(),
     ),
-    // GetPage(
-    //   name: Routes.editPdf,
-    //   page: () => const EditPdfPage(),
-    // ),
+    GetPage(
+      name: Routes.editPdf,
+      page: () => const EditPdfPage(),
+    ),
   ];
 }
