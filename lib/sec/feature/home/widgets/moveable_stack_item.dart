@@ -45,36 +45,14 @@ class _MoveableStackItemState extends State<MoveableStackItem> {
             ),
             width: 120,
             height: 75,
-            child: controller.xPosition.value != 0.0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'X = ${controller.xPosition.value}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Y = ${controller.yPosition.value}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  )
-                : const Center(
-                    child: Text(
-                      'Drag Me',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+            child: Material(
+              child: Image.network(
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
+                height: 100,
+                width: 200,
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
         ),
       );
