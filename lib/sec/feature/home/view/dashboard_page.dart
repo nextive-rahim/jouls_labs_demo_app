@@ -80,18 +80,18 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                         child: const Text(TextConstants.profile),
                       ),
-                      controller.file.isNotEmpty
-                          ? ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary),
-                              onPressed: () async {
-                                savePdf();
-                              },
-                              child: Text(
-                                editButtonTitle(),
-                              ),
-                            )
-                          : const Offstage(),
+                      // controller.file.isNotEmpty
+                      //     ? ElevatedButton(
+                      //         style: ElevatedButton.styleFrom(
+                      //             backgroundColor: AppColors.primary),
+                      //         onPressed: () async {
+                      //           savePdf();
+                      //         },
+                      //         child: Text(
+                      //           editButtonTitle(),
+                      //         ),
+                      //       )
+                      //     : const Offstage(),
                     ],
                   );
                 },

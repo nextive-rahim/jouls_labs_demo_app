@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
-import 'package:jouls_labs_demo_app/sec/feature/home/widgets/moveable_stack_item.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/widgets/pdf_card.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/colors.dart';
 import 'package:jouls_labs_demo_app/sec/feature/utils/text_constants.dart';
@@ -18,7 +19,6 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final controller = Get.put(HomeViewController());
-  List<Widget> movableItems = [const MoveableStackItem()];
 
   @override
   Widget build(BuildContext context) {
@@ -94,23 +94,24 @@ class _HomeViewState extends State<HomeView> {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  height: 800,
-                  color: AppColors.primary,
-                  child: PDFViewerWidget(
-                    pdfLink: controller.file[0].fileUrl!,
-                  ),
-                ),
+                    height: 800,
+                    color: AppColors.primary,
+                    child: PdfViewer(
+                      file: File(
+                        controller.file[0].fileUrl!,
+                      ),
+                    )),
               ),
             ),
-            Obx(
-              () {
-                return Stack(
-                  children: controller.isEditable.value == true
-                      ? movableItems
-                      : List.empty(),
-                );
-              },
-            ),
+            // Obx(
+            //   () {
+            //     return Stack(
+            //       children: controller.isEditable.value == true
+            //           ? controller.movableItems
+            //           : List.empty(),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

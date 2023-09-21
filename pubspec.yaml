@@ -49,6 +49,8 @@ dependencies:
   intl: ^0.18.1
   flutter_pdfview: ^1.2.5
   flutter_launcher_icons: ^0.13.1
+  syncfusion_flutter_pdfviewer: ^23.1.36
+  image_to_byte: ^1.0.0
   
  
 

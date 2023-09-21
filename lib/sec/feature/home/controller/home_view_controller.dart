@@ -1,19 +1,21 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/authentication/controller/login_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/model/upload_file_model.dart';
 import 'package:jouls_labs_demo_app/sec/core/db_helper.dart';
+import 'package:jouls_labs_demo_app/sec/feature/home/widgets/moveable_stack_item.dart';
 
 class HomeViewController extends GetxController {
   DBHelper dbHelper = DBHelper();
   final RxList<UploadedFileModel> file = <UploadedFileModel>[].obs;
-
+  List<Widget> movableItems = [const MoveableStackItem()];
   final userController = Get.find<LoginViewController>();
   User? user = FirebaseAuth.instance.currentUser;
   String? fileUrl;
-
+  Offset? offset;
   RxBool pdfUploadProgressIndicator = false.obs;
   RxBool loadingIndicator = false.obs;
 
