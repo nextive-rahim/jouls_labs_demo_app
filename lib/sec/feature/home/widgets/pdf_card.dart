@@ -89,6 +89,29 @@ class _PdfWidgetState extends State<PdfWidget> {
     setState(() => widget.signatureBytes = iByte);
   }
 
+  Offset convertOffsetToPdfPage(
+      Offset widgetOffset, Size screenSize, Size pdfPageSize) {
+    // Get the screen dimensions of the device.
+    double screenWidth = screenSize.width;
+    double screenHeight = screenSize.height;
+
+    // Map the widget's offset to the screen's top-left corner (0, 0), assuming
+// that the top-left corner of the device's screen corresponds to (0, 0)
+// on the top-left corner of the page in the PDF.
+    double xRatio = widgetOffset.dx / screenWidth;
+    double yRatio = widgetOffset.dy / screenHeight;
+// Recalculate the widget's offset based on the PDF page size.
+
+    double xOffset = xRatio * pdfPageSize.width;
+    double yOffset = yRatio * pdfPageSize.height;
+    // Add a margin for error to the calculated offsets for accuracy.
+    xOffset += pdfPageSize.width * 0.05; // Added for margin of error
+    yOffset += pdfPageSize.height * 0.03; // Added for margin of error
+
+// As a result, the widget's offset is adjusted based on the device's screen size.
+    return Offset(xOffset, yOffset);
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeViewController>();
@@ -128,10 +151,12 @@ class _PdfWidgetState extends State<PdfWidget> {
               ),
               onDragEnd: (details) {
                 RenderBox renderBox = context.findRenderObject() as RenderBox;
-                var offset = renderBox.globalToLocal(details.offset);
+                var offset = renderBox.globalToLocal(
+                  details.offset,
+                );
                 widget.onDragEnd(offset);
-                print("Before Save file x =${offset.dx}");
-                print("Before Save file y =${offset.dy}");
+                print("Before Save file x =${offset.dx - 56}");
+                print("Before Save file y =${offset.dy - 25}");
                 setState(() {});
               },
               child: Column(
@@ -150,18 +175,24 @@ class _PdfWidgetState extends State<PdfWidget> {
                             inputBytes: widget.file.readAsBytesSync());
                         final PdfBitmap image =
                             PdfBitmap(widget.signatureBytes!);
-                        RenderBox renderBox =
-                            context.findRenderObject() as RenderBox;
-                        var offset = renderBox.localToGlobal(
-                            Offset(widget.offset.dx, widget.offset.dy));
+                        var convertedOffset = convertOffsetToPdfPage(
+                            widget.offset,
+                            MediaQuery.of(context).size,
+                            document.pages[currentPage].size);
+
+                        // RenderBox renderBox =
+                        //     context.findRenderObject() as RenderBox;
+                        // var offset = renderBox.globalToLocal(
+                        //     Offset(widget.offset.dx, widget.offset.dy));
                         document.pages[currentPage].graphics.drawImage(
                           image,
-                          Rect.fromLTWH(offset.dx, offset.dy, 250, 150),
+                          Rect.fromLTWH(convertedOffset.dx - 56,
+                              convertedOffset.dy - 25, 250, 150),
                         );
 
                         await widget.file.writeAsBytes(await document.save());
-                        print("After Save file x =${offset.dx}");
-                        print("After Save file y =${offset.dy}");
+                        print("After Save file x =${convertedOffset.dx - 56}");
+                        print("After Save file y =${convertedOffset.dy - 25}");
 
                         document.dispose();
                         widget.isFixed = true;
