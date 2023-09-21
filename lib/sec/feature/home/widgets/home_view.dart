@@ -107,13 +107,21 @@ class _HomeViewState extends State<HomeView> {
                   Positioned(
                     top: controller.yPosition.value,
                     left: controller.xPosition.value,
-                    child: Text(
-                      controller.isSohowPosition.value
-                          ? 'X=${controller.xPosition.value}'
-                          : '',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w800,
+                    child: Container(
+                      color: controller.isSohowPosition.value
+                          ? Colors.black87
+                          : Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          controller.isSohowPosition.value
+                              ? 'X=${controller.xPosition.value}'
+                              : '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                     ),
                   )
@@ -129,15 +137,23 @@ class _HomeViewState extends State<HomeView> {
               () {
                 return Stack(children: [
                   Positioned(
-                    top: controller.yPosition.value - 180,
+                    top: controller.yPosition.value - 190,
                     left: controller.xPosition.value - 190,
-                    child: Text(
-                      controller.isSohowPosition.value
-                          ? 'Y=${controller.yPosition.value}'
-                          : '',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w800,
+                    child: Container(
+                      color: controller.isSohowPosition.value
+                          ? Colors.black87
+                          : Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          controller.isSohowPosition.value
+                              ? 'Y=${controller.yPosition.value}'
+                              : '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                     ),
                   )
