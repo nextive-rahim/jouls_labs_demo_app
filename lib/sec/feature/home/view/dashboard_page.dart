@@ -28,101 +28,94 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          Obx(
+            () {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary),
+                    onPressed: () {
+                      controller.isEditable.value = false;
+                      controller.xPosition.value = 0.0;
+                      controller.yPosition.value = 0.0;
+                      controller.isSavedFile.value = false;
+                      controller.pickDocument();
+                    },
+                    child: const Text(TextConstants.uploadFile),
+                  ),
+                  controller.pdfUploadProgressIndicator.value == true
+                      ? SizedBox(
+                          height: 35,
+                          width: 35,
+                          child: SpinKitFadingCircle(
+                            itemBuilder: (BuildContext context, int index) {
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color:
+                                      index.isEven ? Colors.red : Colors.green,
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : const Offstage(),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary),
+                    onPressed: () {
+                      Get.toNamed(
+                        Routes.profile,
+                        arguments: controller.file,
+                      );
+                    },
+                    child: const Text(TextConstants.profile),
+                  ),
+                  controller.file.isNotEmpty
+                      ? ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary),
+                          onPressed: () {
+                            controller.isEditable.value = true;
+                            print(controller.isEditable.value);
+                          },
+                          child: Text(
+                            TextConstants.edit,
+                          ),
+                        )
+                      : const Offstage(),
+                ],
+              );
+            },
           ),
-          child: Column(
-            children: [
-              Obx(
-                () {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary),
-                        onPressed: () {
-                          controller.isEditable.value = false;
-                          controller.xPosition.value = 0.0;
-                          controller.yPosition.value = 0.0;
-                          controller.isSavedFile.value = false;
-                          controller.pickDocument();
-                        },
-                        child: const Text(TextConstants.uploadFile),
-                      ),
-                      controller.pdfUploadProgressIndicator.value == true
-                          ? SizedBox(
-                              height: 35,
-                              width: 35,
-                              child: SpinKitFadingCircle(
-                                itemBuilder: (BuildContext context, int index) {
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: index.isEven
-                                          ? Colors.red
-                                          : Colors.green,
-                                    ),
-                                  );
-                                },
-                              ),
-                            )
-                          : const Offstage(),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary),
-                        onPressed: () {
-                          Get.toNamed(
-                            Routes.profile,
-                            arguments: controller.file,
-                          );
-                        },
-                        child: const Text(TextConstants.profile),
-                      ),
-                      controller.file.isNotEmpty
-                          ? ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary),
-                              onPressed: () {
-                                controller.isEditable.value = true;
-                                print(controller.isEditable.value);
-                              },
-                              child: Text(
-                                TextConstants.edit,
-                              ),
-                            )
-                          : const Offstage(),
-                    ],
-                  );
-                },
-              ),
-              Obx(
-                () {
-                  if (controller.file.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        'You have not uploaded any file',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }
+          Obx(
+            () {
+              if (controller.file.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'You have not uploaded any file',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                );
+              }
 
-                  return Column(
-                    children: [
-                      SingleChildScrollView(
-                        child: SizedBox(
-                          height: 640,
-                          child: HomeView(),
-                        ),
-                      )
-                    ],
-                  );
-                },
-              ),
-            ],
+              return Column(
+                children: [
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      height: 610,
+                      child: HomeView(),
+                    ),
+                  )
+                ],
+              );
+            },
           ),
-        ),
+        ],
       ),
     );
   }

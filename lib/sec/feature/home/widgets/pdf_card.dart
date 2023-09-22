@@ -41,20 +41,14 @@ class _PdfViewerState extends State<PdfViewer> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          PdfWidget(
-            file: widget.file!,
-            offset: controller.offset ?? Offset(0.0, 0.0),
-            isFixed: isFixed,
-            onDragEnd: (offset) {
-              controller.offset = offset;
-              setState(() {});
-            },
-          ),
-        ],
-      ),
+    return PdfWidget(
+      file: widget.file!,
+      offset: controller.offset ?? Offset(0.0, 0.0),
+      isFixed: isFixed,
+      onDragEnd: (offset) {
+        controller.offset = offset;
+        setState(() {});
+      },
     );
   }
 }
@@ -92,12 +86,13 @@ class _PdfWidgetState extends State<PdfWidget> {
 
   Offset convertOffsetToPdfPage(
     Offset widgetOffset,
-    Size screenSize,
+    double height,
+    double width,
     Size pdfPageSize,
   ) {
     // Get the screen dimensions of the device.
-    double screenWidth = screenSize.width;
-    double screenHeight = screenSize.height;
+    double screenWidth = width;
+    double screenHeight = height;
 
     // Map the widget's offset to the screen's top-left corner (0, 0), assuming
 // that the top-left corner of the device's screen corresponds to (0, 0)
@@ -110,7 +105,7 @@ class _PdfWidgetState extends State<PdfWidget> {
     double yOffset = yRatio * pdfPageSize.height;
     // Add a margin for error to the calculated offsets for accuracy.
     xOffset += pdfPageSize.width * 0.05; // Added for margin of error
-    yOffset += pdfPageSize.height * 0.03; // Added for margin of error
+    yOffset += pdfPageSize.height * 0.08; // Added for margin of error
 
 // As a result, the widget's offset is adjusted based on the device's screen size.
     return Offset(xOffset, yOffset);
@@ -119,131 +114,125 @@ class _PdfWidgetState extends State<PdfWidget> {
   @override
   Widget build(BuildContext context) {
     _imageToByte();
+
     return Stack(
       children: [
-        Container(
-          height: MediaQuery.of(context).size.height,
-          child: SfPdfViewer.file(
-            widget.file,
-            onPageChanged: (page) {
-              currentPage = page.newPageNumber;
-              setState(() {});
-            },
-          ),
+        SfPdfViewer.file(
+          widget.file,
+          onPageChanged: (page) {
+            currentPage = page.newPageNumber;
+            setState(() {});
+          },
         ),
-        SizedBox(height: 5),
-        controller.isEditable.value
-            ? Visibility(
-                visible: widget.signatureBytes != null,
-                child: Positioned(
-                  top: widget.offset.dy,
-                  left: widget.offset.dx,
-                  child: Draggable(
-                    childWhenDragging: Container(),
-                    onDragUpdate: (details) {
-                      setState(() {
-                        controller.isSohowPosition.value = true;
-                        controller.xPosition.value = details.localPosition.dx;
-                        controller.yPosition.value = details.localPosition.dy;
-                      });
+        // SizedBox(height: 5),
+
+        Visibility(
+          visible: controller.isEditable.value,
+          child: Positioned(
+            top: widget.offset.dy,
+            left: widget.offset.dx,
+            child: Draggable(
+              childWhenDragging: Container(),
+              onDragUpdate: (details) {
+                setState(() {
+                  controller.isSohowPosition.value = true;
+                  controller.xPosition.value = details.localPosition.dx;
+                  controller.yPosition.value = details.localPosition.dy;
+                });
+              },
+              feedback: Material(
+                child: Image.network(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
+                  height: 100,
+                  width: 200,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              onDragEnd: (details) {
+                RenderBox renderBox = context.findRenderObject() as RenderBox;
+                var offset = renderBox.globalToLocal(
+                  details.offset,
+                );
+                controller.isSohowPosition.value = false;
+                widget.onDragEnd(offset);
+                // print("Before Save file x =${offset.dx}");
+                // print("Before Save file y =${offset.dy}");
+                setState(() {});
+                print(controller.isSohowPosition.value);
+              },
+              child: Column(
+                children: [
+                  Image.network(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
+                    height: 100,
+                    width: 200,
+                    fit: BoxFit.contain,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      final PdfDocument document = PdfDocument(
+                          inputBytes: widget.file.readAsBytesSync());
+
+                      final PdfBitmap image = PdfBitmap(widget.signatureBytes!);
+                      var convertedOffset = convertOffsetToPdfPage(
+                          widget.offset,
+                          document.pages.count == 1
+                              ? MediaQuery.of(context).size.height - 120
+                              : MediaQuery.of(context).size.height - 150,
+                          MediaQuery.of(context).size.width,
+                          document.pages[currentPage].size);
+
+                      // RenderBox renderBox =
+                      //     context.findRenderObject() as RenderBox;
+                      // var offset = renderBox.globalToLocal(
+                      //     Offset(widget.offset.dx, widget.offset.dy));
+                      document.pages[currentPage].graphics.drawImage(
+                        image,
+                        Rect.fromLTWH(
+                          convertedOffset.dx,
+                          convertedOffset.dy,
+                          250,
+                          150,
+                        ),
+                      );
+                      final directory = await getExternalStorageDirectory();
+                      final filePath = '${directory!.path}/edited_pdf.pdf';
+                      final file = File(filePath);
+                      await file.writeAsBytes(await document.save());
+                      // final modifiedBytes = await document.save();
+                      // final modifiedFile = File(widget.file.path);
+                      // await modifiedFile.writeAsBytes(modifiedBytes);
+                      print(file.path);
+                      controller.editFilePath.value = file.path;
+                      // print("After Save file x =${convertedOffset.dx }");
+                      // print("After Save file y =${convertedOffset.dy }");
+                      Get.toNamed(
+                        Routes.editPdf,
+                        arguments: file.path,
+                      );
+                      document.dispose();
+                      widget.isFixed = true;
+                      setState(() {});
                     },
-                    feedback: Material(
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
-                        height: 100,
-                        width: 200,
-                        fit: BoxFit.contain,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.black,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.done,
+                          color: Colors.green,
+                        ),
                       ),
                     ),
-                    onDragEnd: (details) {
-                      RenderBox renderBox =
-                          context.findRenderObject() as RenderBox;
-                      var offset = renderBox.globalToLocal(
-                        details.offset,
-                      );
-                      controller.isSohowPosition.value = false;
-                      widget.onDragEnd(offset);
-                      // print("Before Save file x =${offset.dx}");
-                      // print("Before Save file y =${offset.dy}");
-                      setState(() {});
-                      print(controller.isSohowPosition.value);
-                    },
-                    child: Column(
-                      children: [
-                        Image.network(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
-                          height: 100,
-                          width: 200,
-                          fit: BoxFit.contain,
-                        ),
-                        Visibility(
-                          visible: !widget.isFixed,
-                          child: InkWell(
-                            onTap: () async {
-                              final PdfDocument document = PdfDocument(
-                                  inputBytes: widget.file.readAsBytesSync());
-                              final PdfBitmap image =
-                                  PdfBitmap(widget.signatureBytes!);
-                              var convertedOffset = convertOffsetToPdfPage(
-                                  widget.offset,
-                                  MediaQuery.of(context).size,
-                                  document.pages[currentPage].size);
-
-                              // RenderBox renderBox =
-                              //     context.findRenderObject() as RenderBox;
-                              // var offset = renderBox.globalToLocal(
-                              //     Offset(widget.offset.dx, widget.offset.dy));
-                              document.pages[currentPage].graphics.drawImage(
-                                image,
-                                Rect.fromLTWH(
-                                  convertedOffset.dx,
-                                  convertedOffset.dy,
-                                  250,
-                                  150,
-                                ),
-                              );
-                              final directory =
-                                  await getExternalStorageDirectory();
-                              final filePath =
-                                  '${directory!.path}/edited_pdf.pdf';
-                              final file = File(filePath);
-                              await file.writeAsBytes(await document.save());
-                              // final modifiedBytes = await document.save();
-                              // final modifiedFile = File(widget.file.path);
-                              // await modifiedFile.writeAsBytes(modifiedBytes);
-                              print(file.path);
-                              controller.editFilePath.value = file.path;
-                              // print("After Save file x =${convertedOffset.dx }");
-                              // print("After Save file y =${convertedOffset.dy }");
-                              Get.toNamed(
-                                Routes.editPdf,
-                                arguments: file.path,
-                              );
-                              document.dispose();
-                              widget.isFixed = true;
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.black,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.done,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : Offstage(),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
