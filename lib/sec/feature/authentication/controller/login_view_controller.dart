@@ -8,8 +8,7 @@ class LoginViewController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   DBHelper dbHelper = DBHelper();
   User? userC;
-  final GoogleSignIn googleSignIn =
-      GoogleSignIn(scopes: ['https://mail.google.com/']);
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   Future<GoogleSignInAccount?> signIn() async {
     if (await googleSignIn.isSignedIn()) {
       return googleSignIn.currentUser;
