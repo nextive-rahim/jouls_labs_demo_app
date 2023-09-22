@@ -5,7 +5,7 @@ class TextConstants {
   static const String fileName = 'File Name : ';
   static const String uploadedTime = 'Uploaded Time : ';
   static const String profile = 'Profile';
-  static const String login = 'Google Login';
+  static const String login = 'Google SignIn';
   static const String edit = 'Edit';
   static const String showEditFile = 'Edited File';
   static const String editedFileName = 'Edited File Name : ';

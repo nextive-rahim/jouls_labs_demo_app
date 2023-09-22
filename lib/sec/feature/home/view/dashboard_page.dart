@@ -29,7 +29,10 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(TextConstants.pdfEditing),
+        title: Text(
+          TextConstants.pdfEditing,
+          style: TextStyle(fontSize: 17),
+        ),
         centerTitle: true,
         backgroundColor: AppColors.primary,
         elevation: 0,

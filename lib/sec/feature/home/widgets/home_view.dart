@@ -98,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
           () {
             return Stack(children: [
               Positioned(
-                top: controller.yPosition.value - 100,
+                top: controller.yPosition.value - 60,
                 left: controller.xPosition.value,
                 child: Container(
                   decoration: BoxDecoration(

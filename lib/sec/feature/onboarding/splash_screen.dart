@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:jouls_labs_demo_app/sec/feature/authentication/controller/login_view_controller.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/model/upload_file_model.dart';
 import 'package:jouls_labs_demo_app/sec/core/db_helper.dart';
+import 'package:jouls_labs_demo_app/sec/feature/utils/assets.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 
 class SplashPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _navigateToNextScreen() async {
-    Future.delayed(const Duration(seconds: 1)).then(
+    Future.delayed(const Duration(seconds: 2)).then(
       (value) {
         if (user != null) {
           if (user!.emailVerified) {
@@ -60,15 +60,16 @@ class _SplashPageState extends State<SplashPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SpinKitFadingCircle(
-          itemBuilder: (BuildContext context, int index) {
-            return DecoratedBox(
-              decoration: BoxDecoration(
-                color: index.isEven ? Colors.red : Colors.green,
-              ),
-            );
-          },
-        ),
+        Image.asset(Assets.appLogo)
+        // SpinKitFadingCircle(
+        //   itemBuilder: (BuildContext context, int index) {
+        //     return DecoratedBox(
+        //       decoration: BoxDecoration(
+        //         color: index.isEven ? Colors.red : Colors.green,
+        //       ),
+        //     );
+        //   },
+        // ),
       ],
     );
   }
