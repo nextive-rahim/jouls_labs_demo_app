@@ -36,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(15),
-            bottomRight: Radius.circular(10),
+            bottomRight: Radius.circular(15),
           ),
         ),
       ),

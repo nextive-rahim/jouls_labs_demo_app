@@ -20,6 +20,12 @@ class ProfileScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: AppColors.primary,
         elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

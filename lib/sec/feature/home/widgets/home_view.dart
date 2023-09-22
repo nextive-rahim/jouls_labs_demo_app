@@ -115,7 +115,6 @@ class _HomeViewState extends State<HomeView> {
                           : '',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -143,14 +142,13 @@ class _HomeViewState extends State<HomeView> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Text(
                       controller.isSohowPosition.value
                           ? 'Y=${controller.yPosition.value}'
                           : '',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

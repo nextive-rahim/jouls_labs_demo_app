@@ -64,7 +64,7 @@ class _DownloadedPdfPageState extends State<DownloadedPdfPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(10),
+                bottomRight: Radius.circular(15),
               ),
             ),
             bottom: PreferredSize(
