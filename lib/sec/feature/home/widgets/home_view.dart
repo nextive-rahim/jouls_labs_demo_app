@@ -103,7 +103,7 @@ class _HomeViewState extends State<HomeView> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: controller.isSohowPosition.value
-                        ? Colors.black87
+                        ? Colors.black54
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -115,7 +115,7 @@ class _HomeViewState extends State<HomeView> {
                           : '',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -138,7 +138,7 @@ class _HomeViewState extends State<HomeView> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: controller.isSohowPosition.value
-                        ? Colors.black87
+                        ? Colors.black54
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -150,7 +150,7 @@ class _HomeViewState extends State<HomeView> {
                           : '',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

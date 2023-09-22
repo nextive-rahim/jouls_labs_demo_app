@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jouls_labs_demo_app/sec/feature/home/controller/home_view_controller.dart';
+import 'package:jouls_labs_demo_app/sec/feature/utils/app_consts.dart';
 import 'package:jouls_labs_demo_app/sec/routes/app_routes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -79,8 +80,7 @@ class _PdfWidgetState extends State<PdfWidget> {
 
   /// Image convert into a Uint8List file.
   void _imageToByte() async {
-    Uint8List iByte = await imageToByte(
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s');
+    Uint8List iByte = await imageToByte(Appconst.dragImageLink);
     setState(() => widget.signatureBytes = iByte);
   }
 
@@ -142,7 +142,7 @@ class _PdfWidgetState extends State<PdfWidget> {
               },
               feedback: Material(
                 child: Image.network(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
+                  Appconst.dragImageLink,
                   height: 100,
                   width: 200,
                   fit: BoxFit.contain,
@@ -163,7 +163,7 @@ class _PdfWidgetState extends State<PdfWidget> {
               child: Column(
                 children: [
                   Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl7Cadho1YF1TCFZRfanGSwIxnklacJPtiycrPEgtw&s',
+                    Appconst.dragImageLink,
                     height: 100,
                     width: 200,
                     fit: BoxFit.contain,
@@ -207,7 +207,7 @@ class _PdfWidgetState extends State<PdfWidget> {
                       // print("After Save file x =${convertedOffset.dx }");
                       // print("After Save file y =${convertedOffset.dy }");
                       Get.toNamed(
-                        Routes.editPdf,
+                        Routes.downloadedPdf,
                         arguments: file.path,
                       );
                       document.dispose();
@@ -237,186 +237,3 @@ class _PdfWidgetState extends State<PdfWidget> {
     );
   }
 }
-
-
-
-// class PDFViewerWidget extends StatefulWidget {
-//   const PDFViewerWidget({
-//     super.key,
-//     required this.pdfLink,
-//   });
-
-//   final String pdfLink;
-
-//   @override
-//   _PDFViewerWidgetState createState() => _PDFViewerWidgetState();
-// }
-
-// class _PDFViewerWidgetState extends State<PDFViewerWidget> {
-//   String urlPDFPath = "";
-//   String title = "";
-//   bool exists = true;
-//   int _totalPages = 0;
-//   int _currentPage = 0;
-//   bool pdfReady = false;
-//   PDFViewController? _pdfViewController;
-//   bool loaded = false;
-//   final homeController = Get.find<HomeViewController>();
-//   void requestPermission() async {
-//     await Permission.storage.request();
-//   }
-
-//   @override
-//   void initState() {
-//     requestPermission();
-
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Obx(() {
-//         if (homeController.pdfUploadProgressIndicator.value == true) {
-//           return Center(
-//             child: Text(
-//               TextConstants.loading,
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//           );
-//         }
-//         return PDFView(
-//           filePath: widget.pdfLink,
-//           enableSwipe: true,
-//           swipeHorizontal: false,
-//           autoSpacing: false,
-//           pageFling: true,
-//           pageSnap: true,
-//           fitPolicy: FitPolicy.BOTH,
-//           onRender: (pages) {
-//             setState(() {
-//               _totalPages = pages!.toInt();
-//               pdfReady = true;
-//             });
-//           },
-//           onViewCreated: (PDFViewController vc) {
-//             setState(() {
-//               _pdfViewController = vc;
-//             });
-//           },
-//           onPageChanged: (int? page, int? total) {
-//             setState(() {
-//               _currentPage = page!.toInt();
-//             });
-//           },
-//         );
-//       }),
-//     );
-//   }
-
-//   Container _buildPageNavigation() {
-//     return Container(
-//       color: Colors.white,
-//       padding: const EdgeInsets.all(00),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: <Widget>[
-//           SizedBox(
-//             height: 41,
-//             width: 130,
-//             child: TextFormField(
-//               textAlign: TextAlign.left,
-//               textAlignVertical: TextAlignVertical.center,
-//               keyboardType: TextInputType.number,
-//               style: const TextStyle(
-//                 fontFamily: 'Poppins',
-//                 fontWeight: FontWeight.w300,
-//                 fontSize: 14,
-//               ),
-//               onChanged: (page) {
-//                 if (int.parse(page) > 0) {
-//                   _pdfViewController!.setPage(
-//                     int.parse(page),
-//                   );
-//                 }
-//               },
-//               decoration: InputDecoration(
-//                 contentPadding: const EdgeInsets.only(
-//                   top: 10,
-//                   right: 20,
-//                   bottom: 10,
-//                   left: 20,
-//                 ),
-//                 isDense: true,
-//                 hintText: 'Page Number',
-//                 hintStyle: const TextStyle(
-//                   fontWeight: FontWeight.w300,
-//                   fontSize: 14,
-//                   color: Colors.black38,
-//                 ),
-//                 fillColor: Colors.transparent,
-//                 focusedBorder: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(10.0),
-//                   borderSide: const BorderSide(
-//                     color: AppColors.primary,
-//                   ),
-//                 ),
-//                 enabledBorder: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(10.0),
-//                   borderSide: const BorderSide(
-//                     color: AppColors.primary,
-//                     width: 0.5,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//           Row(
-//             children: [
-//               IconButton(
-//                 icon: const Icon(Icons.chevron_left),
-//                 iconSize: 50,
-//                 color: AppColors.primary,
-//                 onPressed: () {
-//                   setState(
-//                     () {
-//                       if (_currentPage > 0) {
-//                         _currentPage--;
-//                         _pdfViewController!.setPage(_currentPage);
-//                       }
-//                     },
-//                   );
-//                 },
-//               ),
-//               Text(
-//                 "${_currentPage + 1} / $_totalPages",
-//                 style: const TextStyle(
-//                   color: Colors.black,
-//                   fontSize: 20,
-//                 ),
-//               ),
-//               IconButton(
-//                 icon: const Icon(Icons.chevron_right),
-//                 iconSize: 50,
-//                 color: AppColors.primary,
-//                 onPressed: () {
-//                   setState(
-//                     () {
-//                       if (_currentPage < _totalPages - 1) {
-//                         _currentPage++;
-//                         _pdfViewController!.setPage(_currentPage);
-//                       }
-//                     },
-//                   );
-//                 },
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
