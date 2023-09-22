@@ -70,7 +70,7 @@ class _DownloadedPdfPageState extends State<DownloadedPdfPage> {
             bottom: PreferredSize(
               preferredSize: Size(
                 double.infinity,
-                MediaQuery.of(context).viewPadding.top - 38,
+                MediaQuery.of(context).viewPadding.top,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
