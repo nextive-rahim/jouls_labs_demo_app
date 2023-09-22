@@ -53,46 +53,56 @@ class _EditPdfPageState extends State<EditPdfPage> {
         return true;
       },
       child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: 700,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary),
-                    onPressed: () async {
-                      controller.isShowOriginalFile.value =
-                          !controller.isShowOriginalFile.value;
-                      await controller.loadDocuments();
-                    },
-                    child: Obx(
-                      () {
-                        return Text(
-                          controller.isShowOriginalFile.value
-                              ? TextConstants.showEditFile
-                              : TextConstants.originalFile,
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Obx(
+        appBar: AppBar(
+          title: Text(TextConstants.editedFileInfo),
+          centerTitle: true,
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(10),
+            ),
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SizedBox(
+            height: 700,
+            child: Column(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary),
+                  onPressed: () async {
+                    controller.isShowOriginalFile.value =
+                        !controller.isShowOriginalFile.value;
+                    await controller.loadDocuments();
+                  },
+                  child: Obx(
                     () {
-                      return Container(
-                        height: 530,
-                        child: SfPdfViewer.file(
-                          controller.isShowOriginalFile.value
-                              ? File(controller.file[0].fileUrl!)
-                              : File(Get.arguments),
-                        ),
+                      return Text(
+                        controller.isShowOriginalFile.value
+                            ? TextConstants.showEditFile
+                            : TextConstants.originalFile,
                       );
                     },
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: 15),
+                Obx(
+                  () {
+                    return Container(
+                      height: 530,
+                      child: SfPdfViewer.file(
+                        controller.isShowOriginalFile.value
+                            ? File(controller.file[0].fileUrl!)
+                            : File(Get.arguments),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),

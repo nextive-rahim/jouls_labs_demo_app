@@ -15,4 +15,5 @@ class TextConstants {
   static const String editedFileInfo = 'Edited File Information';
   static const String loading = "Loading...";
   static const String originalFile = "Show Original File";
+  static const String pdfEditing = "Pdf Editing With Drag & Drop";
 }

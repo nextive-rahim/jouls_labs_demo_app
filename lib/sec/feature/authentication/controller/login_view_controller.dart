@@ -42,7 +42,7 @@ class LoginViewController extends GetxController {
       assert(currentUser!.uid == user!.uid);
 
       if (user != null) {
-        Get.toNamed(Routes.home);
+        Get.offAllNamed(Routes.home);
       }
       return user;
     } catch (e) {
@@ -73,7 +73,7 @@ class LoginViewController extends GetxController {
   checkSignIn() async {
     if (await googleSignIn.isSignedIn()) {
       refreshToken().then((value) {
-        Get.toNamed(Routes.home);
+        Get.offAllNamed(Routes.home);
       });
     } else {
       signInWithGoogle();

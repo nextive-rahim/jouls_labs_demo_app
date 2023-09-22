@@ -28,7 +28,18 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(TextConstants.pdfEditing),
+        centerTitle: true,
+        backgroundColor: AppColors.primary,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(10),
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Obx(
