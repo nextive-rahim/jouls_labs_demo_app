@@ -42,3 +42,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+upload.jks
+private_key.pepk
+pubspec.lock
+.fvm/
+.fvm/flutter_sdk
+.fvm/fvm_config.json
