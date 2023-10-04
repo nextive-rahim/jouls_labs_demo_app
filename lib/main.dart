@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     Get.put(LoginViewController());
     return GetMaterialApp(
       navigatorObservers: [RouteObserver<ModalRoute<void>>()],
-      title: 'Jouls Labs',
+      title: 'Pdf Editing',
       debugShowCheckedModeBanner: false,
       getPages: AppPages.pages,
     );
